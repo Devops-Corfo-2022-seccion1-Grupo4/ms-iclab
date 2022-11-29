@@ -1,4 +1,4 @@
-def mvn
+def pipeline_script
 def stg = ""
 
 pipeline {
@@ -6,7 +6,8 @@ pipeline {
 	
 	
 	stages {
-        stage('Version') { 
+	
+		stage('Version') { 
             steps {
                 script{
                     stg = "Version"
@@ -16,24 +17,15 @@ pipeline {
             }
             
         }
-        stage('Building..') {
+
+        stage ('Load Scripts'){
             steps{
                 script{
-                    stg == 'Building'
-                 
-                        mvn = load 'maven.groovy'
-                        mvn.exec()
-                    
-                 
-                    stg = "QualityGate"
+                    pipeline_script= load "maven.groovy"
+                   
+
                 }
-                echo 'QualityGate..'
-                timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true
-                }
-                echo "${stg}"
             }
-            
         }
         stage('uploadNexus') { 
             steps {
