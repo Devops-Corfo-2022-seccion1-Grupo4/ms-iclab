@@ -44,7 +44,7 @@ pipeline {
 
                     echo 'Uploading Nexus'
                     {
-			nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'lab4-e4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "/var/jenkins_home/workspace/ejemplo-gradle_maven-gradle/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
+			nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'lab4-e4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "/var/jenkins_home/workspace/lab4-e4_develop/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
                     }
                 
                 }
@@ -59,7 +59,7 @@ pipeline {
                         stg = "Testing Artifact"
                     }
                     echo 'Testing Artifact'
-                    sh 'curl -X GET -u admin:admin http://nexus:8081/repository/EjercicioUnificar/com.devopsusachs2020.DevOpsUsach2020.0.0.1.jar -O'
+                    sh 'curl -X GET -u admin:admin http://nexus:8081/repository/lab4-e4/com.devopsusachs2020.DevOpsUsach2020.0.0.1.jar -O'
                     echo "${stg}"
                 }
                 
