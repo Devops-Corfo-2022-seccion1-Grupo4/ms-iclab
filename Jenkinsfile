@@ -101,7 +101,7 @@ def custom_msg()
 
 def extraeTag()
 {   
-    sh "git pull origin ${JOB_NAME}"
+    sh "git pull"
     sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
     def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
@@ -110,7 +110,7 @@ def extraeTag()
 }
 def tagAntiguo()
 {   
-    sh "git pull origin ${JOB_NAME}"
+    sh "git pull"
     sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
     def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
@@ -119,7 +119,7 @@ def tagAntiguo()
 }
 def obtenerAutor()
 {   
-    sh "git pull origin ${JOB_NAME}"
+    sh "git pull"
     def autor = sh(script: "git log -p -1 | grep Author", returnStdout: true).toString().trim()
     echo "${autor}"
     largo = autor.length()
