@@ -89,7 +89,7 @@ def custom_msg()
 def extraeTag()
 {   
     sh "git pull"
-    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/trabajo/tag.txt"
+    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/workspace/lab4-e4_develop/tag.txt"
     def tag = sh(script: "cat /var/jenkins_home/trabajo/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
     def resultado = tag.substring(largo-5, largo)
@@ -98,8 +98,8 @@ def extraeTag()
 def tagAntiguo()
 {   
     sh "git pull"
-    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/trabajo/tag.txt"
-    def tag = sh(script: "cat /var/jenkins_home/trabajo/tag.txt", returnStdout: true).toString().trim()
+    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/workspace/lab4-e4_develop/tag.txt"
+    def tag = sh(script: "cat /var/jenkins_home/workspace/lab4-e4_develop/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
     def resultado = tag.substring(largo-11, largo-6)
     return resultado
@@ -121,7 +121,7 @@ def aumentarVersion()
     def vActual = tagAntiguo()
     vActual = "${vActual}"
     def vNuevo = "${tg}"
-    sh "/var/jenkins_home/trabajo/cambioTag.sh ${vActual} ${vNuevo} ${env.WORKSPACE}"
+    sh "/var/jenkins_home/workspace/lab4-e4_develop/cambioTag.sh ${vActual} ${vNuevo} ${env.WORKSPACE}"
     script{
         if("${branch}" == 'develop'){
             echo "Entro a if develop"
