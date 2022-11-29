@@ -20,10 +20,10 @@ pipeline {
             steps{
                 script{
                     stg == 'Building'
-                   {
+                 
                         mvn = load 'maven.groovy'
                         mvn.exec()
-                    }
+                    
                  
                     stg = "QualityGate"
                 }
@@ -43,9 +43,8 @@ pipeline {
                     stg = "uploadNexus"
 
                     echo 'Uploading Nexus'
-                    {
 			nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'lab4-e4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "/var/jenkins_home/workspace/lab4-e4_develop/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
-                    }
+                    
                 
                 }
                 echo "${stg}"
