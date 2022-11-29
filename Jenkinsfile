@@ -90,7 +90,7 @@ def extraeTag()
 {   
     sh "git pull"
     sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/workspace/lab4-e4_develop/tag.txt"
-    def tag = sh(script: "cat /var/jenkins_home/trabajo/tag.txt", returnStdout: true).toString().trim()
+    def tag = sh(script: "cat /var/jenkins_home/workspace/lab4-e4_develop/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
     def resultado = tag.substring(largo-5, largo)
     return resultado
