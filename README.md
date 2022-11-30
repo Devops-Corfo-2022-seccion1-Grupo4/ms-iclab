@@ -1,6 +1,6 @@
 # Getting Started
 # Miau
-
+# Miau2
 ## Windows
 
 ### Compile Code
