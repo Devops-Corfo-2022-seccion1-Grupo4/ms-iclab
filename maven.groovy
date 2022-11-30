@@ -20,24 +20,6 @@ stage('Compile') {
     sh 'nohup bash mvnw spring-boot:run &'
   sleep 20
    }
-  
-   
-  stage ('Sonarqube Analisis') {
-    withSonarQubeEnv('Sonar'){
-		sh 'mvn clean package sonar:sonar'
-    }
-  }
-    stage('SonarQualityGate') {
-    timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true
-    }
-    }
     
-
-	
-
-
-
-
 return this
 
