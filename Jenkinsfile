@@ -18,7 +18,6 @@ pipeline {
                 script{
                     stg = "Version"
                 }
-                echo "${stg}"
                 aumentarVersion()
             }
             
@@ -41,7 +40,6 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
-                echo "${stg}"
             }
             
         }
@@ -61,7 +59,6 @@ pipeline {
                         nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'Lab4-msiclab', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${env.WORKSPACE}/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
                     }
                 }
-                echo "${stg}"
             }
             
         }
@@ -73,7 +70,6 @@ pipeline {
                     }
                     echo 'Testing Artifact'
                     sh 'curl -X GET -u admin:admin http://nexus:8081/repository/EjercicioUnificar/com.devopsusachs2020.DevOpsUsach2020.0.0.1.jar -O'
-                    echo "${stg}"
                 }
                 
         }
@@ -92,11 +88,12 @@ pipeline {
 
 def custom_msg()
 {
+    def branch = env.BRANCH_NAME
     def AUTHOR = obtenerAutor()
     def JOB_NAME = env.JOB_NAME
     def BUILD_ID= env.BUILD_ID
     def version = extraeTag()
-    def MSG= "[GRUPO-4 - ${AUTHOR}] [BRANCH: ${JOB_NAME}] [VERSION: ${version}]"
+    def MSG= "[GRUPO-4 - ${AUTHOR}] [BRANCH: ${branch}] [VERSION: ${version}]"
     return MSG
 }
 
@@ -107,6 +104,7 @@ def extraeTag()
     def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
 	echo tag
     largo = tag.length()
+
     def resultado = tag.substring(largo-5, largo)
     return resultado
 }
@@ -142,12 +140,10 @@ def obtenerAutor()
 def aumentarVersion()
 {
     def tg = extraeTag()
-    def branch = env.BRANCH_NAME
     def vActual = tagAntiguo()
     vActual = "${vActual}"
     def vNuevo = "${tg}"
     sh "${env.WORKSPACE}/trabajo/cambioTag.sh ${vActual} ${vNuevo} ${env.WORKSPACE}"
-
     return vNuevo
 }
 
