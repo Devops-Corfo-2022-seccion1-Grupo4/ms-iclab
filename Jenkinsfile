@@ -23,7 +23,7 @@ pipeline {
             }
             
         }
-        stage('Building..') {
+        stage('Building') {
             steps{
                 script{
                     stg == 'Building'
@@ -53,11 +53,12 @@ pipeline {
                     stg = "uploadNexus"
 
                     echo 'Uploading Nexus'
+                    echo "${env.WORKSPACE}/build/DevOpsUsach2020-${tag}.jar"
                     if(params.Build_Tool == 'maven'){
-				        nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'EjercicioUnificar-maven', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "/var/jenkins_home/workspace/ejemplo-gradle_maven-gradle/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
+			nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'Lab4-msiclab', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${env.WORKSPACE}/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
                     }
                     if(params.Build_Tool == 'gradle'){
-                        nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'EjercicioUnificar-gradle', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "/var/jenkins_home/workspace/ejemplo-gradle_maven-gradle/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
+                        nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'Lab4-msiclab', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${env.WORKSPACE}/build/DevOpsUsach2020-${tag}.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "${tag}"]]]
                     }
                 }
                 echo "${stg}"
@@ -102,19 +103,30 @@ def custom_msg()
 def extraeTag()
 {   
     sh "git pull"
-    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/trabajo/tag.txt"
-    def tag = sh(script: "cat /var/jenkins_home/trabajo/tag.txt", returnStdout: true).toString().trim()
+    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
+    def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
+	echo tag
     largo = tag.length()
     def resultado = tag.substring(largo-5, largo)
     return resultado
 }
 def tagAntiguo()
 {   
+    def resultado
     sh "git pull"
-    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > /var/jenkins_home/trabajo/tag.txt"
-    def tag = sh(script: "cat /var/jenkins_home/trabajo/tag.txt", returnStdout: true).toString().trim()
+    sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
+    def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
-    def resultado = tag.substring(largo-11, largo-6)
+	echo tag
+    script{
+        if(largo >= 6){
+            resultado = tag.substring(largo-11, largo-6)
+        }
+        if(largo == 5){
+            resultado = tag.substring(largo-5, largo)
+        }
+
+    }
     return resultado
 }
 def obtenerAutor()
@@ -134,15 +146,8 @@ def aumentarVersion()
     def vActual = tagAntiguo()
     vActual = "${vActual}"
     def vNuevo = "${tg}"
-    sh "/var/jenkins_home/trabajo/cambioTag.sh ${vActual} ${vNuevo} ${env.WORKSPACE}"
-    script{
-        if("${branch}" == 'develop'){
-            echo "Entro a if develop"
-        } else if("${branch}" == 'main'){
-            echo "Entro a if main."
-        } else if("${branch}" == 'feature*' || "${branch}" == 'release*' ){
-            echo "Entro a if."
-        }
-    }
+    sh "${env.WORKSPACE}/trabajo/cambioTag.sh ${vActual} ${vNuevo} ${env.WORKSPACE}"
+
     return vNuevo
 }
+
