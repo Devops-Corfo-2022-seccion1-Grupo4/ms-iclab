@@ -23,7 +23,7 @@ pipeline {
             }
             
         }
-        stage('Building..') {
+        stage('Building') {
             steps{
                 script{
                     stg == 'Building'
