@@ -104,7 +104,7 @@ def extraeTag()
     sh "git pull"
     sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
     def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
-	echo "${tag}"
+	echo tag
     largo = tag.length()
     def resultado = tag.substring(largo-5, largo)
     return resultado
@@ -116,7 +116,7 @@ def tagAntiguo()
     sh "ls ${env.WORKSPACE}/.git/refs/tags/ > ${env.WORKSPACE}/trabajo/tag.txt"
     def tag = sh(script: "cat ${env.WORKSPACE}/trabajo/tag.txt", returnStdout: true).toString().trim()
     largo = tag.length()
-	echo "${tag}"
+	echo tag
     script{
         if(largo >= 6){
             resultado = tag.substring(largo-11, largo-6)
