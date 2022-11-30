@@ -1,6 +1,4 @@
 # Getting Started
-# Miau 6
-# Update Readme.md LC
 
 ## Windows
 
